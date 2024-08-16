@@ -393,7 +393,7 @@
             <ActivityAction.Argument>
               <DelegateInArgument x:TypeArguments="s:Exception" Name="exception" />
             </ActivityAction.Argument>
-            <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" ContinueOnError="{x:Null}" From="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" ReplyTo="{x:Null}" Result="{x:Null}" SecurePassword="{x:Null}" TimeoutMS="{x:Null}" UseOAuth="{x:Null}" Body="An error occurred in the project which lead to it stopping suddenly, check for errors!" DisplayName="Send SMTP Mail Message" Email="internshipbtk@outlook.com" EnableSSL="True" sap:VirtualizedContainerService.HintSize="333.6,148.8" sap2010:WorkflowViewState.IdRef="SendMail_2" IgnoreCRL="False" IsBodyHtml="False" Password="BTK211JFT1021" Port="587" SecureConnection="Auto" Server="smtp.office365.com" Subject="Error: Sudden Stop" To="malekmiri02@gmail.com">
+            <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" ContinueOnError="{x:Null}" From="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" ReplyTo="{x:Null}" Result="{x:Null}" SecurePassword="{x:Null}" TimeoutMS="{x:Null}" UseOAuth="{x:Null}" Body="An error occurred in the project which lead to it stopping suddenly, check for errors!" DisplayName="Send SMTP Mail Message" Email="insert your email" EnableSSL="True" sap:VirtualizedContainerService.HintSize="333.6,148.8" sap2010:WorkflowViewState.IdRef="SendMail_2" IgnoreCRL="False" IsBodyHtml="False" Password="your password" Port="587" SecureConnection="Auto" Server="smtp.office365.com" Subject="Error: Sudden Stop" To="reply email">
               <ui:SendMail.Files>
                 <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
               </ui:SendMail.Files>
