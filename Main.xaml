@@ -1,4 +1,4 @@
-<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="978.4,4047.2" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives" xmlns:sd1="clr-namespace:System.Drawing;assembly=System.Drawing.Common" xmlns:sdi="clr-namespace:System.Drawing.Imaging;assembly=System.Drawing.Common" xmlns:si="clr-namespace:System.IO;assembly=System.Private.CoreLib" xmlns:ue="clr-namespace:UiPath.Excel;assembly=UiPath.Excel.Activities" xmlns:ueab="clr-namespace:UiPath.Excel.Activities.Business;assembly=UiPath.Excel.Activities" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+<Activity mc:Ignorable="sap sap2010" x:Class="Main" VisualBasic.Settings="{x:Null}" sap:VirtualizedContainerService.HintSize="1128.8,5683.2" sap2010:WorkflowViewState.IdRef="ActivityBuilder_1" xmlns="http://schemas.microsoft.com/netfx/2009/xaml/activities" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:s="clr-namespace:System;assembly=System.Private.CoreLib" xmlns:sap="http://schemas.microsoft.com/netfx/2009/xaml/activities/presentation" xmlns:sap2010="http://schemas.microsoft.com/netfx/2010/xaml/activities/presentation" xmlns:scg="clr-namespace:System.Collections.Generic;assembly=System.Private.CoreLib" xmlns:sco="clr-namespace:System.Collections.ObjectModel;assembly=System.Private.CoreLib" xmlns:sd="clr-namespace:System.Drawing;assembly=System.Drawing.Primitives" xmlns:sdi="clr-namespace:System.Drawing.Imaging;assembly=System.Drawing.Common" xmlns:ue="clr-namespace:UiPath.Excel;assembly=UiPath.Excel.Activities" xmlns:ueab="clr-namespace:UiPath.Excel.Activities.Business;assembly=UiPath.Excel.Activities" xmlns:ui="http://schemas.uipath.com/workflow/activities" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
   <TextExpression.NamespacesForImplementation>
     <sco:Collection x:TypeArguments="x:String">
       <x:String>System.Activities</x:String>
@@ -49,6 +49,8 @@
       <x:String>UiPath.Mail.SMTP.Activities</x:String>
       <x:String>UiPath.Mail.Activities</x:String>
       <x:String>System.Activities.Runtime.Collections</x:String>
+      <x:String>System.Text.RegularExpressions</x:String>
+      <x:String>UiPath.Platform.ResourceHandling</x:String>
     </sco:Collection>
   </TextExpression.NamespacesForImplementation>
   <TextExpression.ReferencesForImplementation>
@@ -122,17 +124,15 @@
       <AssemblyReference>UiPath.Mail</AssemblyReference>
       <AssemblyReference>UiPath.Mail.Activities.Design</AssemblyReference>
       <AssemblyReference>UiPath.Workflow</AssemblyReference>
+      <AssemblyReference>System.Text.RegularExpressions</AssemblyReference>
     </sco:Collection>
   </TextExpression.ReferencesForImplementation>
-  <Sequence sap:VirtualizedContainerService.HintSize="988.8,3982.4" sap2010:WorkflowViewState.IdRef="Sequence_2">
+  <Sequence sap:VirtualizedContainerService.HintSize="1084.8,5618.4" sap2010:WorkflowViewState.IdRef="Sequence_2">
     <Sequence.Variables>
       <Variable x:TypeArguments="ui:Image" Name="I" />
       <Variable x:TypeArguments="ui:Image" Name="imgCIN" />
-      <Variable x:TypeArguments="x:String" Name="num" />
       <Variable x:TypeArguments="sd:Rectangle" Name="rect" />
-      <Variable x:TypeArguments="sd1:Bitmap" Name="croppedImgCIN" />
       <Variable x:TypeArguments="sdi:PixelFormat" Name="format" />
-      <Variable x:TypeArguments="x:String" Name="clientID" />
       <Variable x:TypeArguments="x:String" Name="clientCIN" />
       <Variable x:TypeArguments="s:String[]" Name="imageFiles" />
       <Variable x:TypeArguments="x:String" Name="filePath" />
@@ -149,15 +149,22 @@
         <x:Boolean x:Key="IsExpanded">True</x:Boolean>
       </scg:Dictionary>
     </sap:WorkflowViewStateService.ViewState>
-    <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="926.4,3893.6" sap2010:WorkflowViewState.IdRef="TryCatch_1">
+    <TryCatch DisplayName="Try Catch" sap:VirtualizedContainerService.HintSize="1022.4,5529.6" sap2010:WorkflowViewState.IdRef="TryCatch_1">
       <TryCatch.Try>
-        <Sequence sap:VirtualizedContainerService.HintSize="889.6,3639.2" sap2010:WorkflowViewState.IdRef="Sequence_10">
+        <Sequence sap:VirtualizedContainerService.HintSize="985.6,5275.2" sap2010:WorkflowViewState.IdRef="Sequence_10">
+          <Sequence.Variables>
+            <Variable x:TypeArguments="x:String" Name="extractedCIN" />
+            <Variable x:TypeArguments="x:String" Name="ocrText" />
+            <Variable x:TypeArguments="x:String" Name="clientPIN" />
+            <Variable x:TypeArguments="x:String" Name="num" />
+            <Variable x:TypeArguments="x:Boolean" Name="fileExist" />
+          </Sequence.Variables>
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
             </scg:Dictionary>
           </sap:WorkflowViewStateService.ViewState>
-          <Assign sap:VirtualizedContainerService.HintSize="827.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_3">
+          <Assign sap:VirtualizedContainerService.HintSize="923.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_3">
             <Assign.To>
               <OutArgument x:TypeArguments="x:Int32">[rowIndex]</OutArgument>
             </Assign.To>
@@ -165,158 +172,217 @@
               <InArgument x:TypeArguments="x:Int32">2</InArgument>
             </Assign.Value>
           </Assign>
-          <ui:ForEachFileX DisplayName="For Each File in Folder" Folder="D:\CINs" sap:VirtualizedContainerService.HintSize="827.2,3436.8" sap2010:WorkflowViewState.IdRef="ForEachFileX_2" IncludeSubDirectories="False" OrderBy="NameAscFirst" SkipFolderWithoutPermission="False">
-            <ui:ForEachFileX.Body>
-              <ActivityAction x:TypeArguments="si:FileInfo, x:Int32">
-                <ActivityAction.Argument1>
-                  <DelegateInArgument x:TypeArguments="si:FileInfo" Name="CurrentFile" />
-                </ActivityAction.Argument1>
-                <ActivityAction.Argument2>
-                  <DelegateInArgument x:TypeArguments="x:Int32" Name="CurrentIndex" />
-                </ActivityAction.Argument2>
-                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="793.6,3150.4" sap2010:WorkflowViewState.IdRef="Sequence_9">
+          <ueab:ExcelProcessScopeX DisplayAlerts="{x:Null}" ExistingProcessAction="{x:Null}" FileConflictResolution="{x:Null}" LaunchMethod="{x:Null}" LaunchTimeout="{x:Null}" MacroSettings="{x:Null}" ProcessMode="{x:Null}" ShowExcelWindow="{x:Null}" DisplayName="Excel Process Scope" sap:VirtualizedContainerService.HintSize="923.2,5072.8" sap2010:WorkflowViewState.IdRef="ExcelProcessScopeX_3">
+            <ueab:ExcelProcessScopeX.Body>
+              <ActivityAction x:TypeArguments="ui:IExcelProcess">
+                <ActivityAction.Argument>
+                  <DelegateInArgument x:TypeArguments="ui:IExcelProcess" Name="ExcelProcessScopeTag" />
+                </ActivityAction.Argument>
+                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="889.6,4963.2" sap2010:WorkflowViewState.IdRef="Sequence_15">
                   <sap:WorkflowViewStateService.ViewState>
                     <scg:Dictionary x:TypeArguments="x:String, x:Object">
                       <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                     </scg:Dictionary>
                   </sap:WorkflowViewStateService.ViewState>
-                  <Assign sap:VirtualizedContainerService.HintSize="731.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_2">
-                    <Assign.To>
-                      <OutArgument x:TypeArguments="x:String">[filePath]</OutArgument>
-                    </Assign.To>
-                    <Assign.Value>
-                      <InArgument x:TypeArguments="x:String">[CurrentFile.FullName]</InArgument>
-                    </Assign.Value>
-                  </Assign>
-                  <WriteLine DisplayName="Write Line" sap:VirtualizedContainerService.HintSize="731.2,122.4" sap2010:WorkflowViewState.IdRef="WriteLine_1" Text="[filePath]" />
-                  <ui:LoadImage DisplayName="Load Image" FileName="[filePath]" sap:VirtualizedContainerService.HintSize="731.2,117.6" sap2010:WorkflowViewState.IdRef="LoadImage_2" Image="[imgCIN]" />
-                  <ui:GoogleOCR AllowedCharacters="{x:Null}" DeniedCharacters="{x:Null}" FilterRegion="{x:Null}" Invert="{x:Null}" Language="{x:Null}" Output="{x:Null}" PredictionId="{x:Null}" Scale="{x:Null}" ComputeSkewAngle="False" DisplayName="Private: Tesseract OCR" ExtractWords="False" sap:VirtualizedContainerService.HintSize="731.2,56.8" sap2010:WorkflowViewState.IdRef="GoogleOCR_2" Image="[imgCIN]" NoopExecution="False" Profile="None" Text="[num]" />
-                  <ueab:ExcelProcessScopeX DisplayAlerts="{x:Null}" ExistingProcessAction="{x:Null}" FileConflictResolution="{x:Null}" LaunchMethod="{x:Null}" LaunchTimeout="{x:Null}" MacroSettings="{x:Null}" ProcessMode="{x:Null}" ShowExcelWindow="{x:Null}" DisplayName="Excel Process Scope" sap:VirtualizedContainerService.HintSize="731.2,2651.2" sap2010:WorkflowViewState.IdRef="ExcelProcessScopeX_2">
-                    <ueab:ExcelProcessScopeX.Body>
-                      <ActivityAction x:TypeArguments="ui:IExcelProcess">
+                  <ueab:ExcelApplicationCard Password="{x:Null}" ReadFormatting="{x:Null}" CreateNewFile="False" DisplayName="Use Excel File" sap:VirtualizedContainerService.HintSize="827.2,4874.4" sap2010:WorkflowViewState.IdRef="ExcelApplicationCard_2" ResizeWindow="None" WorkbookPath="D:\BTK Accounts.xlsx">
+                    <ueab:ExcelApplicationCard.Body>
+                      <ActivityAction x:TypeArguments="ue:IWorkbookQuickHandle">
                         <ActivityAction.Argument>
-                          <DelegateInArgument x:TypeArguments="ui:IExcelProcess" Name="ExcelProcessScopeTag" />
+                          <DelegateInArgument x:TypeArguments="ue:IWorkbookQuickHandle" Name="Excel" />
                         </ActivityAction.Argument>
-                        <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="697.6,2541.6" sap2010:WorkflowViewState.IdRef="Sequence_3">
+                        <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="793.6,4581.6" sap2010:WorkflowViewState.IdRef="Sequence_16">
                           <sap:WorkflowViewStateService.ViewState>
                             <scg:Dictionary x:TypeArguments="x:String, x:Object">
                               <x:Boolean x:Key="IsExpanded">True</x:Boolean>
                             </scg:Dictionary>
                           </sap:WorkflowViewStateService.ViewState>
-                          <ueab:ExcelApplicationCard Password="{x:Null}" ReadFormatting="{x:Null}" DisplayName="Use Excel File" sap:VirtualizedContainerService.HintSize="635.2,2452.8" sap2010:WorkflowViewState.IdRef="ExcelApplicationCard_1" ResizeWindow="None" WorkbookPath="D:\BTK Accounts.xlsx">
-                            <ueab:ExcelApplicationCard.Body>
-                              <ActivityAction x:TypeArguments="ue:IWorkbookQuickHandle">
-                                <ActivityAction.Argument>
-                                  <DelegateInArgument x:TypeArguments="ue:IWorkbookQuickHandle" Name="Excel" />
-                                </ActivityAction.Argument>
-                                <Sequence DisplayName="Do" sap:VirtualizedContainerService.HintSize="601.6,2160" sap2010:WorkflowViewState.IdRef="Sequence_4">
-                                  <sap:WorkflowViewStateService.ViewState>
-                                    <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                                      <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                                    </scg:Dictionary>
-                                  </sap:WorkflowViewStateService.ViewState>
-                                  <Assign sap:VirtualizedContainerService.HintSize="539.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_5">
-                                    <Assign.To>
-                                      <OutArgument x:TypeArguments="x:String">[cellAddressA]</OutArgument>
-                                    </Assign.To>
-                                    <Assign.Value>
-                                      <InArgument x:TypeArguments="x:String">["A" &amp; rowIndex.ToString]</InArgument>
-                                    </Assign.Value>
-                                  </Assign>
-                                  <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressA)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="539.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_1">
-                                    <ueab:ReadCellValueX.SaveTo>
-                                      <OutArgument x:TypeArguments="x:String">[clientID]</OutArgument>
-                                    </ueab:ReadCellValueX.SaveTo>
-                                  </ueab:ReadCellValueX>
-                                  <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="The client's ID is:" sap:VirtualizedContainerService.HintSize="539.2,117.6" sap2010:WorkflowViewState.IdRef="MessageBox_1" Text="[clientID]" />
-                                  <Assign sap:VirtualizedContainerService.HintSize="539.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_6">
-                                    <Assign.To>
-                                      <OutArgument x:TypeArguments="x:String">[cellAddressB]</OutArgument>
-                                    </Assign.To>
-                                    <Assign.Value>
-                                      <InArgument x:TypeArguments="x:String">["B" &amp; rowIndex.ToString]</InArgument>
-                                    </Assign.Value>
-                                  </Assign>
-                                  <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressB)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="539.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_2">
-                                    <ueab:ReadCellValueX.SaveTo>
-                                      <OutArgument x:TypeArguments="x:String">[clientCIN]</OutArgument>
-                                    </ueab:ReadCellValueX.SaveTo>
-                                  </ueab:ReadCellValueX>
-                                  <If Condition="[clientCIN = num]" sap:VirtualizedContainerService.HintSize="539.2,1237.6" sap2010:WorkflowViewState.IdRef="If_1">
-                                    <If.Then>
-                                      <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,197.6" sap2010:WorkflowViewState.IdRef="Sequence_5">
-                                        <Sequence.Variables>
-                                          <Variable x:TypeArguments="x:Object" Name="validated" />
-                                        </Sequence.Variables>
-                                        <sap:WorkflowViewStateService.ViewState>
-                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                                          </scg:Dictionary>
-                                        </sap:WorkflowViewStateService.ViewState>
-                                        <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="CIN Verified" sap:VirtualizedContainerService.HintSize="353.6,108.8" sap2010:WorkflowViewState.IdRef="MessageBox_2" Text="[&quot;The values are equal!&quot;]" />
-                                      </Sequence>
-                                    </If.Then>
-                                    <If.Else>
-                                      <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="505.6,869.6" sap2010:WorkflowViewState.IdRef="Sequence_6">
-                                        <sap:WorkflowViewStateService.ViewState>
-                                          <scg:Dictionary x:TypeArguments="x:String, x:Object">
-                                            <x:Boolean x:Key="IsExpanded">True</x:Boolean>
-                                          </scg:Dictionary>
-                                        </sap:WorkflowViewStateService.ViewState>
-                                        <Assign sap:VirtualizedContainerService.HintSize="443.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_7">
-                                          <Assign.To>
-                                            <OutArgument x:TypeArguments="x:String">[cellAddressC]</OutArgument>
-                                          </Assign.To>
-                                          <Assign.Value>
-                                            <InArgument x:TypeArguments="x:String">["C" &amp; rowIndex.ToString]</InArgument>
-                                          </Assign.Value>
-                                        </Assign>
-                                        <ueab:WriteCellX AutoIncrementRow="True" Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressC)]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="443.2,192" sap2010:WorkflowViewState.IdRef="WriteCellX_2" Value="[num]" />
-                                        <Assign sap:VirtualizedContainerService.HintSize="443.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_8">
-                                          <Assign.To>
-                                            <OutArgument x:TypeArguments="x:String">[cellAddressD]</OutArgument>
-                                          </Assign.To>
-                                          <Assign.Value>
-                                            <InArgument x:TypeArguments="x:String">["D" &amp; rowIndex.ToString]</InArgument>
-                                          </Assign.Value>
-                                        </Assign>
-                                        <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressD)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="443.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_3">
-                                          <ueab:ReadCellValueX.SaveTo>
-                                            <OutArgument x:TypeArguments="x:String">[email]</OutArgument>
-                                          </ueab:ReadCellValueX.SaveTo>
-                                        </ueab:ReadCellValueX>
-                                        <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" ContinueOnError="{x:Null}" From="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" ReplyTo="{x:Null}" Result="{x:Null}" SecurePassword="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Greetings, Please note the following update: Old CIN Number: &quot; + clientCIN + &quot; New CIN Number: &quot; + num + &quot; Best regards,&quot;]" DisplayName="Send SMTP Mail Message" Email="internshipbtk@outlook.com" EnableSSL="True" sap:VirtualizedContainerService.HintSize="443.2,169.6" sap2010:WorkflowViewState.IdRef="SendMail_1" IgnoreCRL="False" IsBodyHtml="False" Password="BTK211JFT1021" Port="587" SecureConnection="Auto" Server="smtp.office365.com" Subject="BTK Bank: CIN Update" To="[email]" UseOAuth="False">
-                                          <ui:SendMail.Files>
-                                            <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
-                                          </ui:SendMail.Files>
-                                        </ui:SendMail>
-                                      </Sequence>
-                                    </If.Else>
-                                  </If>
-                                  <Assign sap:VirtualizedContainerService.HintSize="539.2,104.8" sap2010:WorkflowViewState.IdRef="Assign_4">
-                                    <Assign.To>
-                                      <OutArgument x:TypeArguments="x:Int32">[rowIndex]</OutArgument>
-                                    </Assign.To>
-                                    <Assign.Value>
-                                      <InArgument x:TypeArguments="x:Int32">[rowIndex+1]</InArgument>
-                                    </Assign.Value>
-                                  </Assign>
-                                </Sequence>
-                              </ActivityAction>
-                            </ueab:ExcelApplicationCard.Body>
-                          </ueab:ExcelApplicationCard>
+                          <Assign sap:VirtualizedContainerService.HintSize="731.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_20">
+                            <Assign.To>
+                              <OutArgument x:TypeArguments="x:String">[cellAddressA]</OutArgument>
+                            </Assign.To>
+                            <Assign.Value>
+                              <InArgument x:TypeArguments="x:String">["A" &amp; rowIndex.ToString]</InArgument>
+                            </Assign.Value>
+                          </Assign>
+                          <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressA)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="731.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_10">
+                            <ueab:ReadCellValueX.SaveTo>
+                              <OutArgument x:TypeArguments="x:String">[clientPIN]</OutArgument>
+                            </ueab:ReadCellValueX.SaveTo>
+                          </ueab:ReadCellValueX>
+                          <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="Client PIN" sap:VirtualizedContainerService.HintSize="731.2,117.6" sap2010:WorkflowViewState.IdRef="MessageBox_11" Text="[clientPIN]" />
+                          <ui:InterruptibleWhile CurrentIndex="{x:Null}" Condition="[Not String.IsNullOrEmpty(clientPIN.Trim())]" DisplayName="While" sap:VirtualizedContainerService.HintSize="731.2,3956" sap2010:WorkflowViewState.IdRef="InterruptibleWhile_1">
+                            <ui:InterruptibleWhile.Body>
+                              <Sequence DisplayName="Body" sap:VirtualizedContainerService.HintSize="697.6,3809.6" sap2010:WorkflowViewState.IdRef="Sequence_14">
+                                <sap:WorkflowViewStateService.ViewState>
+                                  <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                    <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                  </scg:Dictionary>
+                                </sap:WorkflowViewStateService.ViewState>
+                                <Assign sap:VirtualizedContainerService.HintSize="635.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_12">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[filePath]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">["D:\CINs\"+clientPIN+".jpg"]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <ui:PathExists Resource="{x:Null}" DisplayName="Path Exists" Exists="[fileExist]" sap:VirtualizedContainerService.HintSize="635.2,148" sap2010:WorkflowViewState.IdRef="PathExists_1" Path="[filePath]" PathType="File" />
+                                <If Condition="[fileExist = True]" sap:VirtualizedContainerService.HintSize="635.2,2519.2" sap2010:WorkflowViewState.IdRef="If_2">
+                                  <If.Then>
+                                    <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="601.6,2146.4" sap2010:WorkflowViewState.IdRef="Sequence_17">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:LoadImage DisplayName="Load Image" FileName="[filePath]" sap:VirtualizedContainerService.HintSize="539.2,117.6" sap2010:WorkflowViewState.IdRef="LoadImage_2" Image="[imgCIN]" />
+                                      <ui:GoogleOCR AllowedCharacters="{x:Null}" DeniedCharacters="{x:Null}" FilterRegion="{x:Null}" Invert="{x:Null}" Language="{x:Null}" Output="{x:Null}" PredictionId="{x:Null}" Scale="{x:Null}" ComputeSkewAngle="False" DisplayName="Private: Tesseract OCR" ExtractWords="False" sap:VirtualizedContainerService.HintSize="539.2,56.8" sap2010:WorkflowViewState.IdRef="GoogleOCR_2" Image="[imgCIN]" NoopExecution="False" Profile="None" Text="[num]" />
+                                      <Assign sap:VirtualizedContainerService.HintSize="539.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_10">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:String">[extractedCIN]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:String">[System.Text.RegularExpressions.Regex.Match(num, "\b\d{8}\b").Value]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="Extracted CIN" sap:VirtualizedContainerService.HintSize="539.2,117.6" sap2010:WorkflowViewState.IdRef="MessageBox_3" Text="[extractedCIN]" />
+                                      <Assign sap:VirtualizedContainerService.HintSize="539.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_16">
+                                        <Assign.To>
+                                          <OutArgument x:TypeArguments="x:String">[cellAddressB]</OutArgument>
+                                        </Assign.To>
+                                        <Assign.Value>
+                                          <InArgument x:TypeArguments="x:String">["B" &amp; rowIndex.ToString]</InArgument>
+                                        </Assign.Value>
+                                      </Assign>
+                                      <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressB)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="539.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_7">
+                                        <ueab:ReadCellValueX.SaveTo>
+                                          <OutArgument x:TypeArguments="x:String">[clientCIN]</OutArgument>
+                                        </ueab:ReadCellValueX.SaveTo>
+                                      </ueab:ReadCellValueX>
+                                      <If Condition="[clientCIN = extractedCIN]" sap:VirtualizedContainerService.HintSize="539.2,1346.4" sap2010:WorkflowViewState.IdRef="If_3">
+                                        <If.Then>
+                                          <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,197.6" sap2010:WorkflowViewState.IdRef="Sequence_19">
+                                            <Sequence.Variables>
+                                              <Variable x:TypeArguments="x:Object" Name="validated" />
+                                            </Sequence.Variables>
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="CIN Verified" sap:VirtualizedContainerService.HintSize="353.6,108.8" sap2010:WorkflowViewState.IdRef="MessageBox_4" Text="[&quot;The values are equal!&quot;]" />
+                                          </Sequence>
+                                        </If.Then>
+                                        <If.Else>
+                                          <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="505.6,987.2" sap2010:WorkflowViewState.IdRef="Sequence_20">
+                                            <sap:WorkflowViewStateService.ViewState>
+                                              <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                                <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                              </scg:Dictionary>
+                                            </sap:WorkflowViewStateService.ViewState>
+                                            <Assign sap:VirtualizedContainerService.HintSize="443.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_17">
+                                              <Assign.To>
+                                                <OutArgument x:TypeArguments="x:String">[cellAddressC]</OutArgument>
+                                              </Assign.To>
+                                              <Assign.Value>
+                                                <InArgument x:TypeArguments="x:String">["C" &amp; rowIndex.ToString]</InArgument>
+                                              </Assign.Value>
+                                            </Assign>
+                                            <ueab:WriteCellX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressC)]" DisplayName="Write Cell" sap:VirtualizedContainerService.HintSize="443.2,192" sap2010:WorkflowViewState.IdRef="WriteCellX_3" Value="[extractedCIN]" />
+                                            <Assign sap:VirtualizedContainerService.HintSize="443.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_13">
+                                              <Assign.To>
+                                                <OutArgument x:TypeArguments="x:String">[cellAddressD]</OutArgument>
+                                              </Assign.To>
+                                              <Assign.Value>
+                                                <InArgument x:TypeArguments="x:String">["D" &amp; rowIndex.ToString]</InArgument>
+                                              </Assign.Value>
+                                            </Assign>
+                                            <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressD)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="443.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_6">
+                                              <ueab:ReadCellValueX.SaveTo>
+                                                <OutArgument x:TypeArguments="x:String">[email]</OutArgument>
+                                              </ueab:ReadCellValueX.SaveTo>
+                                            </ueab:ReadCellValueX>
+                                            <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="Email Address" sap:VirtualizedContainerService.HintSize="443.2,117.6" sap2010:WorkflowViewState.IdRef="MessageBox_9" Text="[email]" />
+                                            <ui:SendMail Bcc="{x:Null}" Cc="{x:Null}" ContinueOnError="{x:Null}" From="{x:Null}" MailMessage="{x:Null}" Name="{x:Null}" ReplyTo="{x:Null}" Result="{x:Null}" SecurePassword="{x:Null}" TimeoutMS="{x:Null}" Body="[&quot;Greetings, Please note the following update: Old CIN Number: &quot; + clientCIN + &quot; New CIN Number: &quot; + extractedCIN + &quot; Best regards,&quot;]" DisplayName="Send SMTP Mail Message" Email="internshipbtk@outlook.com" EnableSSL="True" sap:VirtualizedContainerService.HintSize="443.2,169.6" sap2010:WorkflowViewState.IdRef="SendMail_3" IgnoreCRL="False" IsBodyHtml="False" Password="BTK211JFT1021" Port="587" SecureConnection="Auto" Server="smtp.office365.com" Subject="BTK Bank: CIN Update" To="[email]" UseOAuth="False">
+                                              <ui:SendMail.Files>
+                                                <scg:List x:TypeArguments="InArgument(x:String)" Capacity="0" />
+                                              </ui:SendMail.Files>
+                                            </ui:SendMail>
+                                          </Sequence>
+                                        </If.Else>
+                                      </If>
+                                    </Sequence>
+                                  </If.Then>
+                                  <If.Else>
+                                    <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="416,202.4" sap2010:WorkflowViewState.IdRef="Sequence_18">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <Throw Exception="[New System.Exception(&quot;File not found.&quot;)]" sap:VirtualizedContainerService.HintSize="353.6,113.6" sap2010:WorkflowViewState.IdRef="Throw_1" />
+                                    </Sequence>
+                                  </If.Else>
+                                </If>
+                                <Assign sap:VirtualizedContainerService.HintSize="635.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_21">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:Int32">[rowIndex]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:Int32">[rowIndex+1]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <Assign sap:VirtualizedContainerService.HintSize="635.2,113.6" sap2010:WorkflowViewState.IdRef="Assign_22">
+                                  <Assign.To>
+                                    <OutArgument x:TypeArguments="x:String">[cellAddressA]</OutArgument>
+                                  </Assign.To>
+                                  <Assign.Value>
+                                    <InArgument x:TypeArguments="x:String">["A" &amp; rowIndex.ToString]</InArgument>
+                                  </Assign.Value>
+                                </Assign>
+                                <ueab:ReadCellValueX Cell="[Excel.Sheet(&quot;Feuil1&quot;).Cell(cellAddressA)]" DisplayName="Read Cell Value" GetFormattedText="True" sap:VirtualizedContainerService.HintSize="635.2,192" sap2010:WorkflowViewState.IdRef="ReadCellValueX_11">
+                                  <ueab:ReadCellValueX.SaveTo>
+                                    <OutArgument x:TypeArguments="x:String">[clientPIN]</OutArgument>
+                                  </ueab:ReadCellValueX.SaveTo>
+                                </ueab:ReadCellValueX>
+                                <ui:MessageBox Caption="{x:Null}" ChosenButton="{x:Null}" AutoCloseAfter="00:00:02" DisplayName="Client PIN" sap:VirtualizedContainerService.HintSize="635.2,117.6" sap2010:WorkflowViewState.IdRef="MessageBox_13" Text="[clientPIN]" />
+                                <If Condition="[String.IsNullOrEmpty(clientPIN)]" sap:VirtualizedContainerService.HintSize="635.2,403.2" sap2010:WorkflowViewState.IdRef="If_5">
+                                  <If.Then>
+                                    <Sequence DisplayName="Then" sap:VirtualizedContainerService.HintSize="416,136.8" sap2010:WorkflowViewState.IdRef="Sequence_23">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                      <ui:Break sap:VirtualizedContainerService.HintSize="353.6,48" sap2010:WorkflowViewState.IdRef="Break_1" />
+                                    </Sequence>
+                                  </If.Then>
+                                  <If.Else>
+                                    <Sequence DisplayName="Else" sap:VirtualizedContainerService.HintSize="416,104.8" sap2010:WorkflowViewState.IdRef="Sequence_24">
+                                      <sap:WorkflowViewStateService.ViewState>
+                                        <scg:Dictionary x:TypeArguments="x:String, x:Object">
+                                          <x:Boolean x:Key="IsExpanded">True</x:Boolean>
+                                        </scg:Dictionary>
+                                      </sap:WorkflowViewStateService.ViewState>
+                                    </Sequence>
+                                  </If.Else>
+                                </If>
+                              </Sequence>
+                            </ui:InterruptibleWhile.Body>
+                          </ui:InterruptibleWhile>
+                          <TerminateWorkflow DisplayName="Terminate Workflow" sap:VirtualizedContainerService.HintSize="731.2,113.6" sap2010:WorkflowViewState.IdRef="TerminateWorkflow_2" Reason="Empty or null value encountered. Exiting the workflow." />
                         </Sequence>
                       </ActivityAction>
-                    </ueab:ExcelProcessScopeX.Body>
-                  </ueab:ExcelProcessScopeX>
+                    </ueab:ExcelApplicationCard.Body>
+                  </ueab:ExcelApplicationCard>
                 </Sequence>
               </ActivityAction>
-            </ui:ForEachFileX.Body>
-          </ui:ForEachFileX>
+            </ueab:ExcelProcessScopeX.Body>
+          </ueab:ExcelProcessScopeX>
         </Sequence>
       </TryCatch.Try>
       <TryCatch.Catches>
-        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="892.8,23.2" sap2010:WorkflowViewState.IdRef="Catch`1_1">
+        <Catch x:TypeArguments="s:Exception" sap:VirtualizedContainerService.HintSize="988.8,23.2" sap2010:WorkflowViewState.IdRef="Catch`1_1">
           <sap:WorkflowViewStateService.ViewState>
             <scg:Dictionary x:TypeArguments="x:String, x:Object">
               <x:Boolean x:Key="IsExpanded">False</x:Boolean>
