@@ -4,6 +4,7 @@
   "description": "Trying out the local version",
   "main": "Main.xaml",
   "dependencies": {
+    "UiPath.DocumentUnderstanding.Activities": "[2.11.0-preview]",
     "UiPath.Excel.Activities": "[2.23.4]",
     "UiPath.Mail.Activities": "[1.23.1]",
     "UiPath.OCR.Activities": "[3.21.0-preview]",
